@@ -1,0 +1,17 @@
+name: Check pull request source branch for stage
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+jobs:
+  check-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branches
+        run: |
+          if [ ${{ github.head_ref }} != "development" ] && [ ${{ github.base_ref }} == "stage" ]; then
+            echo "Merge requests to stage branch are only allowed from development branch."
+            exit 1
+          fi
